@@ -7,6 +7,16 @@ interface HelloProps {
   store: StoreType;
 }
 export const Hello: React.FC<HelloProps> = ({ store }) => {
+  const socket = React.useRef<null | WebSocket>(null);
+
+  React.useEffect(() => {
+    socket.current = new WebSocket("ws://localhost:8080");
+
+    socket.current.onmessage = (message) => {
+      console.log(message);
+    };
+  });
+
   return (
     <>
       <h1>Hello config</h1>

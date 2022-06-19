@@ -12,14 +12,16 @@
   "license": "UNLICENSED",
   "description": "Here is a simple config for React SSR App",
   "dependencies": {
+    "@types/request-promise": "^4.1.48",
     "concurrently": "^7.2.1",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "ejs": "^3.0.2",
     "express": "^4.17.3",
     "mini-css-extract-plugin": "^2.6.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "request-promise": "^4.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

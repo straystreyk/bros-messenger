@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 const prepareSsr = async (store: StoreType, url: string) => {
-  store.state.color = "blue";
+  store.state.color = "red";
 
   if (url === "/") {
     store.state.data = { userId: 1 };
@@ -41,7 +41,7 @@ app.use("*", async (req: express.Request, res: express.Response) => {
     `
       <script type="text/javascript">window._SSR_STORE_ = ${JSON.stringify(
         store.state
-      )}; </script>
+      )}; </script> 
       <div id="app">${appHTML}</div>
     `
   );
