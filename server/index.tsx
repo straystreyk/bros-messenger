@@ -4,6 +4,7 @@ import React from "react";
 import dotenv from "dotenv";
 import express from "express";
 import ReactDOMServer from "react-dom/server";
+import request from "request-promise";
 import { StaticRouter } from "react-router-dom/server";
 import { Store, StoreType } from "../src/store";
 import { App } from "../src/components/app";
@@ -13,9 +14,10 @@ const app = express();
 
 const prepareSsr = async (store: StoreType, url: string) => {
   store.state.color = "red";
+  const d = await request(process.env.APP_API_CONNECTION_STRING);
 
   if (url === "/") {
-    store.state.data = { userId: 1 };
+    store.state.data = { userId: JSON.parse(d).message };
   }
 };
 

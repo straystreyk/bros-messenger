@@ -1,4 +1,5 @@
 const path = require("path");
+const NodeExternals = require("webpack-node-externals");
 
 const isDev = process.env.NODE_ENV === "development";
 const isProd = !isDev;
@@ -6,6 +7,7 @@ const isProd = !isDev;
 module.exports = {
   entry: "./index.ts",
   target: "node",
+  externals: [NodeExternals()],
   output: {
     filename: "index.js",
     path: path.resolve(__dirname, "build"),
