@@ -4,5 +4,9 @@ import { Role } from "./Role";
 export const db = {
   user: User,
   role: Role,
-  Roles: ["USER", "ADMIN", "MODERATOR"],
+  Roles: {
+    user: "USER",
+    moderator: "MODERATOR",
+    admin: "ADMIN",
+  },
 };

@@ -1,7 +1,8 @@
 export interface StoreType {
   state: {
     color?: string;
-    data?: { userId: number };
+    error?: string;
+    data?: { id: number };
   };
 }
 

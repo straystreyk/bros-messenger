@@ -9,7 +9,7 @@ export const useAuthForm = () => {
     setFormState((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
-  const sendAuth = async (e: React.MouseEvent) => {
+  const registration = async (e: React.MouseEvent) => {
     e.preventDefault();
 
     try {
@@ -25,17 +25,20 @@ export const useAuthForm = () => {
         }
       );
 
-      const ans = await res.json();
+      const data = await res.json();
+      console.log(data);
+      if (data && data.error) return;
       setFormState({});
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message);
+        setFormState({});
       }
     }
   };
 
   return {
-    sendAuth,
+    registration,
     formState,
     getInputValue,
   };

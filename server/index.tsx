@@ -14,10 +14,13 @@ const app = express();
 
 const prepareSsr = async (store: StoreType, url: string) => {
   store.state.color = "red";
-  const d = await request(process.env.APP_API_CONNECTION_STRING);
-
-  if (url === "/") {
-    store.state.data = { userId: JSON.parse(d).message };
+  if (url === "/auth") {
+    try {
+      const d = await request(process.env.APP_API_CONNECTION_STRING);
+      store.state.data = { id: JSON.parse(d).message };
+    } catch (e) {
+      store.state.error = e.message;
+    }
   }
 };
 

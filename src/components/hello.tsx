@@ -22,13 +22,13 @@ const useSocket = () => {
   };
 };
 
-export const Hello: React.FC<HelloProps> = ({ store }) => {
+export const Hello: React.FC<HelloProps> = ({ store, ...props }) => {
   return (
     <>
       <h1>Hello config</h1>
       <div className={popa}>
         <p>color: {store.state.color}</p>
-        <p>User id: {store.state.data.userId}</p>
+        <p>User id: {store.state.data && store.state.data.id}</p>
       </div>
     </>
   );

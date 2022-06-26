@@ -3,12 +3,29 @@ import { Schema, model } from "mongoose";
 export const User = model(
   "User",
   new Schema({
-    username: String,
-    email: String,
-    password: String,
+    username: {
+      type: String,
+      minlength: 2,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      minlength: 6,
+      required: true,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     roles: [
       {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: "Role",
       },
     ],
