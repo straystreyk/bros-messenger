@@ -3,3 +3,5 @@ build
 dist
 config/build-stats.json
 .idea
+.env
+api/.env
