@@ -1,6 +1,7 @@
 import * as React from "react";
 import { popa } from "./test.module.css";
 import { StoreType } from "../store";
+import { Button } from "@mui/material";
 
 interface HelloProps {
   store: StoreType;
@@ -26,6 +27,9 @@ export const Hello: React.FC<HelloProps> = ({ store, ...props }) => {
   return (
     <>
       <h1>Hello config</h1>
+      <Button variant="contained" color="primary">
+        ~Hello
+      </Button>
       <div className={popa}>
         <p>color: {store.state.color}</p>
         <p>User id: {store.state.data && store.state.data.id}</p>

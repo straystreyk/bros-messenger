@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { StoreType } from "../store";
 import { Hello } from "./hello";
 import { AuthForm } from "./Auth/AuthForm";
@@ -15,14 +15,11 @@ export const App: React.FC<AppProps> = ({ store }) => {
       <Routes>
         <Route path="auth">
           <Route path="" element={<Hello store={store} />} />
-          <Route
-            path="registration"
-            element={<AuthForm isResetPage={false} />}
-          />
+          <Route path="registration" element={<AuthForm />} />
           <Route path="reset" element={<AuthForm isResetPage={true} />} />
           <Route path="verify" element={<Verify />} />
         </Route>
-        <Route path="*" element={<Navigate to="/auth" replace />} />
+        <Route path="*" element={<div>пока ниче нет(</div>} />
       </Routes>
     </>
   );

@@ -12,7 +12,11 @@
   "license": "UNLICENSED",
   "description": "Here is a simple config for React SSR App",
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.8.7",
     "@types/request-promise": "^4.1.48",
+    "axios": "^0.27.2",
     "concurrently": "^7.2.1",
     "dotenv": "^16.0.1",
     "ejs": "^3.0.2",

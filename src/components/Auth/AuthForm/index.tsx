@@ -2,7 +2,7 @@ import * as React from "react";
 import { useAuthForm } from "./use-auth-form";
 
 interface AuthFormProps {
-  isResetPage: boolean;
+  isResetPage?: boolean;
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({ isResetPage }) => {

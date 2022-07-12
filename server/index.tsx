@@ -8,6 +8,10 @@ import request from "request-promise";
 import { StaticRouter } from "react-router-dom/server";
 import { Store, StoreType } from "../src/store";
 import { App } from "../src/components/app";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CacheProvider } from "@emotion/react";
+import { MUITheme } from "../src/theme";
+import { createTheme } from "@mui/material/styles";
 
 dotenv.config();
 const app = express();
@@ -26,6 +30,8 @@ const prepareSsr = async (store: StoreType, url: string) => {
 
 app.use(express.static(path.resolve(__dirname, "../client")));
 app.use("*", async (req: express.Request, res: express.Response) => {
+  const cache = MUITheme.createEmotionCache();
+
   let indexHTML = fs.readFileSync(
     path.resolve(__dirname, "../client/start-page.html"),
     {
@@ -38,9 +44,21 @@ app.use("*", async (req: express.Request, res: express.Response) => {
 
   const appHTML = ReactDOMServer.renderToString(
     <StaticRouter location={req.originalUrl}>
-      <App store={store} />
+      <CacheProvider value={cache}>
+        <ThemeProvider
+          theme={createTheme(
+            MUITheme.getDesignTokens(
+              req.cookies && req.cookies.mode ? req.cookies.mode : "dark"
+            )
+          )}
+        >
+          <App store={store} />
+          <CssBaseline />
+        </ThemeProvider>
+      </CacheProvider>
     </StaticRouter>
   );
+
   indexHTML = indexHTML.replace(
     '<div id="app"></div>',
     `
