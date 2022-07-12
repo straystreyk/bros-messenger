@@ -1,0 +1,33 @@
+.form {
+    max-width: 550px;
+    width: 90vw;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form h1 {
+    margin-bottom: 2rem;
+}
+
+
+.form .logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.form .logo svg {
+    height: 120px;
+    width: 120px;
+}
+
+.input {
+    margin: 10px;
+}
+
+.formWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
