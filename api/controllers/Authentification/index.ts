@@ -8,7 +8,11 @@ import type {
   RegistrationFormType,
   UserTokenInfo,
 } from "../../types/auth-types";
-import { accountAcceptMailOpts, transporter } from "../Mailer";
+import {
+  accountAcceptMailOpts,
+  resetPasswordMailOpts,
+  transporter,
+} from "../Mailer";
 
 config();
 
@@ -29,13 +33,13 @@ export const registration = async (
   if (!email || !password || !username)
     return res
       .status(403)
-      .send({ error: "Seems like you forgot something...", status: 403 });
+      .send({ message: "Seems like you forgot something...", status: 403 });
 
   const candidate = await db.user.findOne({ $or: [{ email }, { username }] });
 
   if (candidate) {
     return res.status(409).send({
-      error: `User with this username (${username}) or email (${email}) already exist`,
+      message: `User with username: "${username}" or email: "${email}" is already exist`,
       status: 409,
     });
   }
@@ -55,7 +59,7 @@ export const registration = async (
     );
   } catch (e) {
     if (e instanceof Error) {
-      return res.status(402).send({ error: e.message, status: 402 });
+      return res.status(402).send({ message: e.message, status: 402 });
     }
   }
 
@@ -71,7 +75,7 @@ export const verify = async (req: express.Request, res: express.Response) => {
   try {
     const userInfo = jwt.verify(token, process.env.SECRET_JWT);
     await db.user.updateOne(
-      { id: (userInfo as UserTokenInfo).id },
+      { _id: (userInfo as UserTokenInfo).id },
       { verified: true }
     );
 
@@ -89,8 +93,67 @@ export const verify = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const reset = (req: express.Request, res: express.Response) => {
-  const { email, username }: Omit<RegistrationFormType, "password"> = req.body;
+export const reset = async (req: express.Request, res: express.Response) => {
+  const { email }: Omit<RegistrationFormType, "password"> = req.body;
 
-  res.send({ message: "reset" });
+  if (!email)
+    return res
+      .status(403)
+      .send({ message: "Seems like you forgot something...", status: 403 });
+
+  const candidate = await db.user.findOne({ email });
+
+  if (!candidate)
+    return res.send({
+      message: `We can't find the user with email: "${email}"`,
+      status: 404,
+    });
+
+  const { id, username } = candidate;
+
+  try {
+    await transporter.sendMail(resetPasswordMailOpts({ email, username, id }));
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(402).send({ message: e.message, status: 402 });
+    }
+  }
+
+  res.send({
+    message:
+      "We have sent you instructions on how to reset your password to your email.",
+    status: 200,
+  });
+};
+
+export const reset_password = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const { id, password }: { id: string; password: string } = req.body;
+
+  if (!id || !password)
+    return res
+      .status(403)
+      .send({ message: "Seems like you forgot something...", status: 403 });
+
+  try {
+    await db.user.updateOne(
+      { _id: id },
+      { password: bcrypt.hashSync(password, 7) }
+    );
+
+    return res.send({
+      message: "We changed your password. Go back to login page and enjoy :)",
+      status: 200,
+    });
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(403).json({
+        redirect: "/",
+        status: 403,
+        message: e.message,
+      });
+    }
+  }
 };

@@ -1,5 +1,5 @@
 .form {
-    max-width: 550px;
+    max-width: 800px;
     width: 90vw;
     margin: 0 auto;
     text-align: center;
@@ -8,7 +8,6 @@
 .form h1 {
     margin-bottom: 2rem;
 }
-
 
 .form .logo {
     display: flex;
@@ -21,9 +20,10 @@
     width: 120px;
 }
 
-.input {
-    margin: 10px;
+.input:global(.MuiTextField-root) {
+    margin-bottom: 1rem;
 }
+
 
 .formWrapper {
     display: flex;
@@ -31,3 +31,4 @@
     justify-content: center;
     min-height: 100vh;
 }
+

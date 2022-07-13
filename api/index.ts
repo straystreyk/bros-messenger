@@ -2,7 +2,12 @@ import cors from "cors";
 import express from "express";
 import { config } from "dotenv";
 import { connect } from "mongoose";
-import { registration, reset, verify } from "./controllers/Authentification";
+import {
+  registration,
+  reset,
+  reset_password,
+  verify,
+} from "./controllers/Authentification";
 
 config();
 const { API_PORT, API_IP, DB_CONNECTION_STRING } = process.env;
@@ -20,6 +25,7 @@ app.get("/api", (req: express.Request, res: express.Response) => {
 app.post("/api/registration", registration);
 app.post("/api/verify", verify);
 app.post("/api/reset", reset);
+app.post("/api/reset_password", reset_password);
 
 async function startApi() {
   try {
