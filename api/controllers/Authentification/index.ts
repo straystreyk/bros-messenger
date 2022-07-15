@@ -28,7 +28,8 @@ export const registration = async (
   req: express.Request,
   res: express.Response
 ) => {
-  const { email, password, username }: RegistrationFormType = req.body;
+  const { email, password, username, name, surname }: RegistrationFormType =
+    req.body;
 
   if (!email || !password || !username)
     return res
@@ -48,7 +49,9 @@ export const registration = async (
     email,
     password: bcrypt.hashSync(password, 7),
     username,
-    roles: db.Roles.admin,
+    name,
+    surname,
+    roles: [db.Roles.admin],
   });
 
   try {
@@ -57,16 +60,16 @@ export const registration = async (
     await transporter.sendMail(
       accountAcceptMailOpts({ email, username, token })
     );
+
+    return res.status(200).send({
+      message: "We are send you a message on your email. Check it out",
+      status: 200,
+    });
   } catch (e) {
     if (e instanceof Error) {
       return res.status(402).send({ message: e.message, status: 402 });
     }
   }
-
-  res.status(200).send({
-    message: "We are send you a message on your email. Check it out",
-    status: 200,
-  });
 };
 
 export const verify = async (req: express.Request, res: express.Response) => {

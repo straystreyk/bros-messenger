@@ -1,7 +1,10 @@
 import * as React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+import { Validator } from "../../../helpers/Validator";
 
 type FormDataType = Record<string, string>;
+const validate = new Validator();
 
 export const useAuthForm = ({
   isRegistrationPage,
@@ -12,25 +15,52 @@ export const useAuthForm = ({
   isResetPage?: boolean;
   isResetPassword?: boolean;
 }) => {
+  const location = useLocation();
+  const id = new URLSearchParams(location.search).get("id");
   const [formState, setFormState] = React.useState<FormDataType>({});
+  const [errors, setErrors] = React.useState<string[]>([]);
   const [modal, setModal] = React.useState<{ open: boolean; text?: string }>({
     open: false,
   });
   const [loading, setLoading] = React.useState(false);
-  const location = useLocation();
-  const id = new URLSearchParams(location.search).get("id");
-
-  console.log(id);
 
   const handleClose = () => setModal((p) => ({ ...p, open: false }));
 
-  const getInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState((p) => ({ ...p, [e.target.name]: e.target.value }));
-  };
+  const getErrors = React.useCallback(
+    (validate: boolean, name: string) => {
+      if (!validate && !errors.includes(name)) {
+        setErrors((p) => [...p, name]);
+      } else if (validate && errors.includes(name)) {
+        setErrors((p) => p.filter((el) => el !== name));
+      }
+    },
+    [errors]
+  );
+
+  const getInputValue = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      switch (e.target.name) {
+        case "email":
+          getErrors(validate.email(e.target.value), e.target.name);
+          break;
+        case "username":
+          getErrors(validate.minLength(e.target.value, 2), e.target.name);
+          break;
+        case "password":
+          getErrors(validate.minLength(e.target.value, 6), e.target.name);
+          break;
+      }
+      setFormState((p) => ({ ...p, [e.target.name]: e.target.value }));
+    },
+    [errors]
+  );
 
   const sendForm = React.useCallback(
     async (e: React.MouseEvent) => {
       e.preventDefault();
+      if (errors.length)
+        return setModal({ open: true, text: "Check the errors pls :)" });
+
       let link = window._GLOBALS_.APP_API_CONNECTION_STRING;
       if (isResetPage) link += "/reset";
       if (isRegistrationPage) link += "/registration";
@@ -76,5 +106,6 @@ export const useAuthForm = ({
     modal,
     handleClose,
     loading,
+    errors,
   };
 };

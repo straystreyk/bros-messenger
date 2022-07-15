@@ -26,6 +26,9 @@ export const getDesignTokens = (mode: "light" | "dark") => ({
           // palette values for dark mode
           primary: deepOrange,
           secondary: deepPurple,
+          error: {
+            main: "#d50000",
+          },
         }),
   },
 });

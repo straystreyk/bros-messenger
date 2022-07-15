@@ -19,6 +19,14 @@ export const User = model(
       minlength: 6,
       required: true,
     },
+    name: {
+      type: String,
+      required: false,
+    },
+    surname: {
+      type: String,
+      required: false,
+    },
     verified: {
       type: Boolean,
       default: false,
