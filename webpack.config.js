@@ -5,7 +5,7 @@ const TerserWebpackPlugin = require("terser-webpack-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 const NodeExternals = require("webpack-node-externals");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+// const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const { getGlobals } = require("./config/get-globals");
 
@@ -15,6 +15,7 @@ const isProd = !isDev;
 const globals = getGlobals();
 const optimization = () => {
   const config = {
+    minimize: true,
     splitChunks: {
       chunks: "all",
     },
@@ -23,7 +24,9 @@ const optimization = () => {
   if (isProd) {
     config.minimizer = [
       new CssMinimizerWebpackPlugin(),
-      new TerserWebpackPlugin(),
+      new TerserWebpackPlugin({
+        parallel: true,
+      }),
     ];
   }
 
@@ -42,11 +45,6 @@ const ServerConfig = {
   resolve: {
     extensions: [".js", ".jsx", ".ejs", ".tsx", ".ts"],
   },
-  plugins: [
-    // new MiniCssExtractPlugin({
-    //   filename: "[name].[contenthash].css",
-    // }),
-  ],
   module: {
     rules: [
       {
@@ -54,6 +52,9 @@ const ServerConfig = {
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
+          options: {
+            cacheDirectory: true,
+          },
         },
       },
       {
@@ -137,14 +138,6 @@ const ClientConfig = {
       filename: "[name].[contenthash].css",
     }),
     new CleanWebpackPlugin(),
-    // new CopyWebpackPlugin({
-    //   patterns: [
-    //     {
-    //       from: path.resolve(__dirname, "src", "public", "favicon.ico"),
-    //       to: path.resolve(__dirname, "build"),
-    //     },
-    //   ],
-    // }),
   ],
   module: {
     rules: [
@@ -153,6 +146,9 @@ const ClientConfig = {
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
+          options: {
+            cacheDirectory: true,
+          },
         },
       },
       {
