@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import { connect } from "mongoose";
 import {
@@ -14,6 +15,7 @@ const { API_PORT, API_IP, DB_CONNECTION_STRING } = process.env;
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

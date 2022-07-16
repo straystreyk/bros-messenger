@@ -24,7 +24,10 @@ export const useAuthForm = ({
   });
   const [loading, setLoading] = React.useState(false);
 
-  const handleClose = () => setModal((p) => ({ ...p, open: false }));
+  const handleClose = React.useCallback(
+    () => setModal((p) => ({ ...p, open: false })),
+    [setModal]
+  );
 
   const getErrors = React.useCallback(
     (validate: boolean, name: string) => {
@@ -34,7 +37,7 @@ export const useAuthForm = ({
         setErrors((p) => p.filter((el) => el !== name));
       }
     },
-    [errors]
+    [errors, setErrors]
   );
 
   const getInputValue = React.useCallback(
@@ -52,11 +55,11 @@ export const useAuthForm = ({
       }
       setFormState((p) => ({ ...p, [e.target.name]: e.target.value }));
     },
-    [errors]
+    [getErrors, setFormState]
   );
 
   const sendForm = React.useCallback(
-    async (e: React.MouseEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
       if (errors.length)
         return setModal({ open: true, text: "Check the errors pls :)" });
@@ -96,7 +99,15 @@ export const useAuthForm = ({
         setLoading(false);
       }
     },
-    [formState, isResetPage, isRegistrationPage, isResetPassword]
+    [
+      formState,
+      isResetPage,
+      isRegistrationPage,
+      isResetPassword,
+      setFormState,
+      setLoading,
+      setModal,
+    ]
   );
 
   return {

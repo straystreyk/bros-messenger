@@ -1,4 +1,4 @@
-import { deepOrange, red, deepPurple } from "@mui/material/colors";
+import { deepOrange, red, deepPurple, lightGreen } from "@mui/material/colors";
 
 // Create a theme instance.
 export const getDesignTokens = (mode: "light" | "dark") => ({
@@ -26,6 +26,7 @@ export const getDesignTokens = (mode: "light" | "dark") => ({
           // palette values for dark mode
           primary: deepOrange,
           secondary: deepPurple,
+          success: lightGreen,
           error: {
             main: "#d50000",
           },

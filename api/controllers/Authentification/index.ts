@@ -160,3 +160,24 @@ export const reset_password = async (
     }
   }
 };
+
+// export const login = async (req, res) => {
+//   try {
+//     const { login, password } = req.body;
+//     const user = await User.findOne({ login });
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .json({ message: `Пользователь ${login} не найден` });
+//     }
+//     const valid_password = bcrypt.compareSync(password, user.password);
+//     if (!valid_password) {
+//       return res.status(400).json({ message: "Неправильный пароль" });
+//     }
+//     const token = generate_access_token(user.id, user.roles, user.name);
+//     return res.json({ token });
+//   } catch (e) {
+//     console.log(e);
+//     return res.json({ message: "login error" });
+//   }
+// };

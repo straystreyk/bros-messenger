@@ -1,0 +1,27 @@
+.loaderWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.loaderWrapper svg {
+    vertical-align: middle;
+}
+
+.progress:global(.MuiCircularProgress-root) {
+    margin-right: 20px;
+}
+
+.contentWrapper {
+    display: inline-flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.icon {
+    margin-right: 20px;
+}
