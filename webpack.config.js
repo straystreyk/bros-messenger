@@ -15,7 +15,6 @@ const isProd = !isDev;
 const globals = getGlobals();
 const optimization = () => {
   const config = {
-    minimize: true,
     splitChunks: {
       chunks: "all",
     },
@@ -24,9 +23,7 @@ const optimization = () => {
   if (isProd) {
     config.minimizer = [
       new CssMinimizerWebpackPlugin(),
-      new TerserWebpackPlugin({
-        parallel: true,
-      }),
+      new TerserWebpackPlugin(),
     ];
   }
 
@@ -52,9 +49,6 @@ const ServerConfig = {
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
-          options: {
-            cacheDirectory: true,
-          },
         },
       },
       {
@@ -146,9 +140,6 @@ const ClientConfig = {
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
-          options: {
-            cacheDirectory: true,
-          },
         },
       },
       {
