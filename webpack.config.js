@@ -4,8 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 const NodeExternals = require("webpack-node-externals");
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin =
+//   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 // const CopyWebpackPlugin = require("copy-webpack-plugin");
 
@@ -140,18 +140,18 @@ const ClientConfig = {
       filename: "[name].[contenthash].css",
     }),
     new CleanWebpackPlugin(),
-    new BundleAnalyzerPlugin({
-      analyzerMode: "server",
-      analyzerHost: "localhost",
-      analyzerPort: 8888,
-      reportFilename: "report.html",
-      defaultSizes: "parsed",
-      openAnalyzer: true,
-      generateStatsFile: false,
-      statsFilename: "stats.json",
-      statsOptions: null,
-      logLevel: "info",
-    }),
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: "server",
+    //   analyzerHost: "localhost",
+    //   analyzerPort: 8888,
+    //   reportFilename: "report.html",
+    //   defaultSizes: "parsed",
+    //   openAnalyzer: true,
+    //   generateStatsFile: false,
+    //   statsFilename: "stats.json",
+    //   statsOptions: null,
+    //   logLevel: "info",
+    // }),
   ],
   module: {
     rules: [
