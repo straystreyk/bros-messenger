@@ -1,7 +1,10 @@
 import * as React from "react";
 
 import { form, input } from "./auth-form.module.css";
-import { Button, CircularProgress, TextField, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import { useAuthForm } from "./use-auth-form";
 import { MainModal } from "../../Modal";

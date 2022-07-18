@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
-import { CheckCircleOutlined } from "@mui/icons-material";
+import CircularProgress from "@mui/material/CircularProgress";
+import CheckCircleOutlined from "@mui/icons-material/CheckCircleOutlined";
 
 import {
   loaderWrapper,

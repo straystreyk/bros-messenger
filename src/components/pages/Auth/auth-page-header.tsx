@@ -1,8 +1,6 @@
 import * as React from "react";
 import { logo } from "./auth-form.module.css";
 import { Logo } from "../../../UI/icons/logo";
-import { Link } from "@mui/material";
-import { Link as LinkRRD } from "react-router-dom";
 import { MainLink } from "../../../UI/components/Link";
 
 export const AuthPageHeader: React.FC<{
@@ -44,14 +42,10 @@ export const AuthPageHeader: React.FC<{
         {!isRegistrationPage && !isResetPage && !isResetPassword && "Login"}
       </h1>
       {!isRegistrationPage && !isResetPage && !isResetPassword && (
-        <MainLink text="Join us! Register now!" component={LinkRRD} to="/" />
+        <MainLink text="Join us! Register now!" to="/" />
       )}
       {isRegistrationPage && (
-        <MainLink
-          text={"Already have an account? Login!"}
-          component={LinkRRD}
-          to="/login"
-        />
+        <MainLink text={"Already have an account? Login!"} to="/login" />
       )}
     </div>
   );

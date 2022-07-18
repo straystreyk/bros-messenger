@@ -4,6 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 const NodeExternals = require("webpack-node-externals");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 // const CopyWebpackPlugin = require("copy-webpack-plugin");
 
@@ -16,26 +18,12 @@ const globals = getGlobals();
 const optimization = () => {
   const config = {
     minimize: isProd,
+    concatenateModules: isProd,
+    flagIncludedChunks: isProd,
     splitChunks: {
-      chunks: "async",
-      minSize: 20000,
-      minRemainingSize: 0,
+      chunks: "all",
       minChunks: 1,
-      maxAsyncRequests: 30,
-      maxInitialRequests: 30,
-      enforceSizeThreshold: 50000,
-      cacheGroups: {
-        defaultVendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10,
-          reuseExistingChunk: true,
-        },
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
+      minSize: 20000,
     },
   };
 
@@ -53,6 +41,7 @@ const ServerConfig = {
   entry: "./server/index.tsx",
   target: "node",
   externals: [NodeExternals()],
+  mode: isDev ? "development" : "production",
   output: {
     path: path.join(__dirname, "build/server"),
     filename: "index.js",
@@ -151,6 +140,18 @@ const ClientConfig = {
       filename: "[name].[contenthash].css",
     }),
     new CleanWebpackPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: "server",
+      analyzerHost: "localhost",
+      analyzerPort: 8888,
+      reportFilename: "report.html",
+      defaultSizes: "parsed",
+      openAnalyzer: true,
+      generateStatsFile: false,
+      statsFilename: "stats.json",
+      statsOptions: null,
+      logLevel: "info",
+    }),
   ],
   module: {
     rules: [

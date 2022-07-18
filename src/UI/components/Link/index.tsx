@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Link, type LinkProps as LinkPropsMUI } from "@mui/material";
+import Link from "@mui/material/Link";
+import { type LinkProps as LinkPropsMUI } from "@mui/material/Link";
 import { Link as LinkRRD } from "react-router-dom";
 
 import { link } from "./link.module.css";

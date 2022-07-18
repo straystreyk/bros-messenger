@@ -1,4 +1,8 @@
-import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+
 import * as React from "react";
 
 const style = {
