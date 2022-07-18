@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { App } from "./components/app";
 import { BrowserRouter } from "react-router-dom";
 import { CacheProvider } from "@emotion/react";

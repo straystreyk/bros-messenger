@@ -1,7 +1,8 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckCircleOutlined from "@mui/icons-material/CheckCircleOutlined";
+import { useLocation, useNavigate } from "react-router-dom";
+import { MainLink } from "../../../UI/components/Link";
 
 import {
   loaderWrapper,
@@ -9,7 +10,6 @@ import {
   icon,
   contentWrapper,
 } from "./verify.module.css";
-import { MainLink } from "../../../UI/components/Link";
 
 export const Verify: React.FC = () => {
   const location = useLocation();
