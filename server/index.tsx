@@ -5,14 +5,13 @@ import dotenv from "dotenv";
 import express from "express";
 import ReactDOMServer from "react-dom/server";
 import request from "request-promise";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 import { StaticRouter } from "react-router-dom/server";
 import { Store, StoreType } from "../src/store";
 import { App } from "../src/components/app";
 import { CacheProvider } from "@emotion/react";
 import { MUITheme } from "../src/theme";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 dotenv.config();
 const app = express();
