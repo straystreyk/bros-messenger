@@ -1,7 +1,8 @@
 import * as React from "react";
-import { logo } from "./auth-form.module.css";
+import { logo, themeSwitch } from "./auth-form.module.css";
 import { Logo } from "../../../UI/icons/logo";
 import { MainLink } from "../../../UI/components/Link";
+import { ThemeSwitch } from "../../../UI/components/Switch/theme-switch";
 
 export const AuthPageHeader: React.FC<{
   isResetPage?: boolean;
@@ -38,15 +39,16 @@ export const AuthPageHeader: React.FC<{
       <Logo />
       <h1>
         {(isResetPage || isResetPassword) && "Reset password"}
-        {isRegistrationPage && "Registratin"}
+        {isRegistrationPage && "Registration"}
         {!isRegistrationPage && !isResetPage && !isResetPassword && "Login"}
       </h1>
       {!isRegistrationPage && !isResetPage && !isResetPassword && (
         <MainLink text="Join us! Register now!" to="/" />
       )}
       {isRegistrationPage && (
-        <MainLink text={"Already have an account? Login!"} to="/login" />
+        <MainLink text="Already have an account? Login!" to="/login" />
       )}
+      <ThemeSwitch className={themeSwitch} />
     </div>
   );
 });

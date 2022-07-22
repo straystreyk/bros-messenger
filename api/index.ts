@@ -1,33 +1,34 @@
 import cors from "cors";
 import express from "express";
-import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import { connect } from "mongoose";
 import {
+  login,
   registration,
   reset,
   reset_password,
   verify,
-} from "./controllers/Authentification";
+} from "./controllers/Authentication";
 
 config();
 const { API_PORT, API_IP, DB_CONNECTION_STRING } = process.env;
 const app = express();
 
+// Middlewares
 app.use(cors());
-app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
+// Check api
 app.get("/api", (req: express.Request, res: express.Response) => {
   res.send({ message: "Hello form Node api :_)" });
 });
 
-// Authentification
+// Authentication
 app.post("/api/registration", registration);
 app.post("/api/verify", verify);
 app.post("/api/reset", reset);
 app.post("/api/reset_password", reset_password);
+app.post("/api/login", login);
 
 async function startApi() {
   try {

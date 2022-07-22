@@ -2,6 +2,7 @@ import * as React from "react";
 import { useLocation } from "react-router-dom";
 
 import { Validator } from "../../../helpers/Validator";
+import { useAuth } from "../../../Providers/authenticate";
 
 type FormDataType = Record<string, string>;
 const validate = new Validator();
@@ -16,6 +17,7 @@ export const useAuthForm = ({
   isResetPassword?: boolean;
 }) => {
   const location = useLocation();
+  const { isAuthenticate, setIsAuthenticate } = useAuth();
   const id = new URLSearchParams(location.search).get("id");
   const [formState, setFormState] = React.useState<FormDataType>({});
   const [errors, setErrors] = React.useState<string[]>([]);
@@ -64,6 +66,8 @@ export const useAuthForm = ({
       if (errors.length)
         return setModal({ open: true, text: "Check the errors pls :)" });
 
+      setLoading(true);
+      let login;
       let link = window._GLOBALS_.APP_API_CONNECTION_STRING;
       if (isResetPage) link += "/reset";
       if (isRegistrationPage) link += "/registration";
@@ -71,10 +75,10 @@ export const useAuthForm = ({
         link += "/reset_password";
         setFormState((p) => ({ ...p, id }));
       }
-      if (!isResetPage && !isRegistrationPage && !isResetPassword)
+      if (!isResetPage && !isRegistrationPage && !isResetPassword) {
         link += "/login";
-
-      setLoading(true);
+        login = true;
+      }
 
       try {
         const res = await fetch(link, {
@@ -82,14 +86,21 @@ export const useAuthForm = ({
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: "jopa",
           },
           body: JSON.stringify(formState),
         });
 
         const data = await res.json();
 
-        if (data) setModal({ open: true, text: data.message });
-        if (data.status === 200) setFormState({});
+        if (data && data.message) setModal({ open: true, text: data.message });
+        if (data.status === 200) {
+          if (login) {
+            document.cookie = `token=Bearer ${encodeURIComponent(data.token)}`;
+            setIsAuthenticate(true);
+          }
+          setFormState({});
+        }
       } catch (e) {
         if (e instanceof Error) {
           setModal({ open: true, text: e.message });
@@ -109,6 +120,10 @@ export const useAuthForm = ({
       setModal,
     ]
   );
+
+  React.useEffect(() => {
+    if (errors.length) setErrors([]);
+  }, [location.pathname]);
 
   return {
     sendForm,

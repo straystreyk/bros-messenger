@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { form, input } from "./auth-form.module.css";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
@@ -9,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useAuthForm } from "./use-auth-form";
 import { MainModal } from "../../Modal";
 import { MainLink } from "../../../UI/components/Link";
+import { form, input } from "./auth-form.module.css";
 
 export const AuthForm: React.FC<{
   isResetPage?: boolean;
@@ -51,7 +51,7 @@ export const AuthForm: React.FC<{
         <TextField
           autoComplete="username"
           id="username"
-          label="Username"
+          label={!isRegistrationPage ? "Username or email" : "Username"}
           variant="outlined"
           error={errors.includes("username")}
           name="username"
@@ -62,21 +62,23 @@ export const AuthForm: React.FC<{
           helperText="Username must be more then 2 symbols"
           required
         />
-        <TextField
-          autoComplete="current-password"
-          type="password"
-          name="password"
-          error={errors.includes("password")}
-          id="password"
-          label="Password"
-          variant="outlined"
-          helperText="Password must be more then 6 symbols"
-          classes={{ root: input }}
-          fullWidth
-          required
-          value={formState.password || ""}
-          onChange={getInputValue}
-        />
+        {!isResetPage && (
+          <TextField
+            autoComplete="current-password"
+            type="password"
+            name="password"
+            error={errors.includes("password")}
+            id="password"
+            label="Password"
+            variant="outlined"
+            helperText="Password must be more then 6 symbols"
+            classes={{ root: input }}
+            fullWidth
+            required
+            value={formState.password || ""}
+            onChange={getInputValue}
+          />
+        )}
         {isRegistrationPage && (
           <>
             <TextField

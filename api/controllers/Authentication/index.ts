@@ -16,12 +16,18 @@ import {
 
 config();
 
-const generateAccessAccountToken: (opts: { id: string }) => string = ({
-  id,
-}) => {
-  return jwt.sign({ id, createdAt: Date.now() }, process.env.SECRET_JWT, {
-    expiresIn: "5m",
-  });
+const generateAccessAccountToken: (opts: {
+  id: string;
+  expiresIn: string;
+  [p: string]: string | unknown[] | number;
+}) => string = ({ id, expiresIn, ...rest }) => {
+  return jwt.sign(
+    { id, ...rest, createdAt: Date.now() },
+    process.env.SECRET_JWT,
+    {
+      expiresIn,
+    }
+  );
 };
 
 export const registration = async (
@@ -56,7 +62,10 @@ export const registration = async (
 
   try {
     const newUser = await user.save();
-    const token = generateAccessAccountToken({ id: newUser.id });
+    const token = generateAccessAccountToken({
+      id: newUser.id,
+      expiresIn: "5m",
+    });
     await transporter.sendMail(
       accountAcceptMailOpts({ email, username, token })
     );
@@ -161,23 +170,47 @@ export const reset_password = async (
   }
 };
 
-// export const login = async (req, res) => {
-//   try {
-//     const { login, password } = req.body;
-//     const user = await User.findOne({ login });
-//     if (!user) {
-//       return res
-//         .status(400)
-//         .json({ message: `Пользователь ${login} не найден` });
-//     }
-//     const valid_password = bcrypt.compareSync(password, user.password);
-//     if (!valid_password) {
-//       return res.status(400).json({ message: "Неправильный пароль" });
-//     }
-//     const token = generate_access_token(user.id, user.roles, user.name);
-//     return res.json({ token });
-//   } catch (e) {
-//     console.log(e);
-//     return res.json({ message: "login error" });
+export const login = async (req: express.Request, res: express.Response) => {
+  try {
+    const { username, password } = req.body;
+    const candidate = await db.user.findOne({
+      $or: [{ email: username }, { username }],
+    });
+
+    if (!candidate) {
+      return res
+        .status(400)
+        .send({ message: `User ${username} didn't find`, status: 403 });
+    }
+    const valid_password = bcrypt.compareSync(password, candidate.password);
+
+    if (!valid_password) {
+      return res
+        .status(403)
+        .send({ message: `Incorrect username or password`, status: 403 });
+    }
+    const token = generateAccessAccountToken({
+      id: candidate.id,
+      roles: candidate.roles,
+      username: candidate.username,
+      expiresIn: "5000h",
+    });
+    return res.status(200).send({ token, status: 200 });
+  } catch (e) {
+    return res.status(500).send({ message: e.message, status: 500 });
+  }
+};
+
+// export const verifyAuthToken = async (
+//   req: express.Request,
+//   res: express.Response
+// ) => {
+//   const { token } = req.body;
+//   const userInfo = jwt.verify(token, process.env.SECRET_JWT);
+//
+//   if (userInfo) {
+//     return res.status(200).send({ message: "ok", status: 200 });
 //   }
+//
+//   return res.status(500).send({ message: "token is not valid", status: 500 });
 // };

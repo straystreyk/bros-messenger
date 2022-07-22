@@ -7,28 +7,28 @@ import { BrowserRouter } from "react-router-dom";
 import { CacheProvider } from "@emotion/react";
 
 import "./index.css";
-import { Store } from "./store";
+import { Store, StoreType, ThemeType } from "./store";
 import { MUITheme } from "./theme";
 import { createTheme } from "@mui/material/styles";
+import { ThemeContext } from "./Providers/theme";
 
 const container = document.getElementById("app");
-
 const cache = MUITheme.createEmotionCache();
-
-const ColorModeContext = React.createContext(null);
-
 const store = new Store(window._SSR_STORE_);
 
-const Main = () => {
-  const [mode, setMode] = React.useState<"light" | "dark">("dark");
+const useMain = ({ store }: { store: StoreType }) => {
+  const [mode, setMode] = React.useState<ThemeType>(store.state.theme);
 
   const colorMode = React.useMemo(
     () => ({
       // The dark mode switch would invoke this method
       toggleColorMode: () => {
-        setMode((prevMode: "light" | "dark") =>
-          prevMode === "light" ? "dark" : "light"
-        );
+        setMode((prevMode: ThemeType) => {
+          const currentTheme = prevMode === "light" ? "dark" : "light";
+          document.cookie = `theme=${currentTheme}`;
+          localStorage.setItem("theme", currentTheme);
+          return currentTheme;
+        });
       },
     }),
     []
@@ -40,17 +40,27 @@ const Main = () => {
     [mode]
   );
 
+  return {
+    theme,
+    colorMode,
+  };
+};
+
+const Main = () => {
+  const { theme, colorMode } = useMain({ store });
+
   return (
     <BrowserRouter>
       <CacheProvider value={cache}>
-        <ColorModeContext.Provider value={colorMode}>
+        <ThemeContext.Provider value={colorMode}>
           <ThemeProvider theme={theme}>
             <App store={store} />
             <CssBaseline />
           </ThemeProvider>
-        </ColorModeContext.Provider>
+        </ThemeContext.Provider>
       </CacheProvider>
     </BrowserRouter>
   );
 };
+
 const root = ReactDOM.hydrateRoot(container, <Main />);
